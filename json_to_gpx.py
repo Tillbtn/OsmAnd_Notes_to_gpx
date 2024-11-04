@@ -16,12 +16,17 @@ def rename_to_zip(filename):
     # new_name = filename[:-4] + '.zip'
     new_name = 'archive.zip'
     os.rename(filename, new_name)
-    
+
 def unzip_file(filename):
     target_dir = os.getcwd()
     with zipfile.ZipFile(filename, 'r') as zip_ref:
         zip_ref.extractall(target_dir)
-   
+
+def cleanup():
+    os.remove('items.json')
+    os.remove('osm_notes.json')
+    os.remove('archive.zip')
+
 
 def json_to_gpx(json_file, gpx_file):
     # read json
@@ -30,9 +35,10 @@ def json_to_gpx(json_file, gpx_file):
 
     # create gpx structure
     gpx = ET.Element('gpx', version="1.1", creator="JSON to GPX Converter")
-    
+
     for item in data['items']:
-        wpt = ET.SubElement(gpx, 'wpt', lat=str(item['lat']), lon=str(item['lon']))
+        wpt = ET.SubElement(gpx, 'wpt', lat=str(
+            item['lat']), lon=str(item['lon']))
         name = ET.SubElement(wpt, 'name')
         name.text = item['text']
 
@@ -45,3 +51,4 @@ def json_to_gpx(json_file, gpx_file):
 rename_to_zip(get_name())
 unzip_file('archive.zip')
 json_to_gpx('osm_notes.json', 'osm_notes.gpx')
+cleanup()
