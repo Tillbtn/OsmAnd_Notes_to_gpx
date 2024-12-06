@@ -4,11 +4,12 @@ from datetime import datetime
 import zipfile
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import shutil
 
 # create file name with current date
-def get_name():
+def get_name(file_extension):
     current_date = datetime.now().strftime('%Y-%m-%d')
-    current_date = 'Export_' + current_date + '.osf'
+    current_date = 'Export_' + current_date + '.' + file_extension
     return current_date
 
 # rename file form .osf to .zip
@@ -47,8 +48,14 @@ def json_to_gpx(json_file, gpx_file):
     with open(gpx_file, "w") as f:
         f.write(xmlstr)
 
+def move_file(filename, destination):
+    if not os.path.exists(destination):
+        os.makedirs(destination)
+    shutil.move(filename, destination)
+
 # usage
-rename_to_zip(get_name())
+rename_to_zip(get_name('osf'))
 unzip_file('archive.zip')
-json_to_gpx('osm_notes.json', 'osm_notes.gpx')
+json_to_gpx('osm_notes.json', get_name('gpx'))
 cleanup()
+move_file(get_name('gpx'), 'Export')
