@@ -17,7 +17,7 @@ A simple script to convert local notes from OsmAnd to GPX format for use in JOSM
 2. Run the script with the following command:
 
    ```bash
-   python .\json_to_gpx.py
+   python .\osf_to_gpx.py
 
 ### Step 3: Open `.gpx` file as a new layer in JOSM
 - your previous exports can be found in folder 'Export'
